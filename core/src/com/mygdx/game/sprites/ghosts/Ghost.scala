@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.{Polygon, Rectangle, Vector2}
 import com.mygdx.game.{Game, Score}
 import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.GameSprite
+import com.mygdx.game.sprites.ghosts.Scatter
 import com.mygdx.game.sprites.level.{Door, Wall}
 import com.mygdx.game.textures.TextureLoader
 import com.mygdx.game.utils.Utils
@@ -13,6 +14,8 @@ import com.mygdx.game.utils.Utils
 import scala.util.Random
 
 abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
+
+  protected var target: Vector2 = new Vector2(0,0)
 
   var mode = Scatter
 
@@ -24,6 +27,8 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
 
   val width = 14
   val height = 14
+
+  def setTarget(): Unit
 
   def getDirectionVector(newDirection: Direction): Vector2 = {
     newDirection match {
@@ -41,7 +46,7 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
     position.add(movement)
     rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
     sprite.setPosition(rectangle.x, rectangle.y)
-    game.level.tiles.filter(tile => tile.tileType == Wall).foreach(wall => {
+    game.level.tiles.flatten.filter(tile => tile.tileType == Wall).foreach(wall => {
       if (rectangle.overlaps(wall.sprite.getBoundingRectangle)) {
         collides = true
       }
@@ -52,6 +57,8 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
   }
 
   override def update(delta: Float): Unit = {
+
+    setTarget()
 
     currentDirection match {
 

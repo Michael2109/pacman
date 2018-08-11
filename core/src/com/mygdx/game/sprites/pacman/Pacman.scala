@@ -35,7 +35,7 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
     position.add(movement)
     rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
     sprite.setPosition(rectangle.x, rectangle.y)
-    game.level.tiles.filter(tile => tile.tileType == Wall || tile.tileType == Door).foreach(wall => {
+    game.level.tiles.flatten.filter(tile => tile.tileType == Wall || tile.tileType == Door).foreach(wall => {
       if(rectangle.overlaps(wall.sprite.getBoundingRectangle)){
         collides = true
       }
@@ -81,7 +81,7 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
   }
 
   def collisionDetection(): Unit ={
-    game.level.tiles.filter(tile => tile.tileType == Wall || tile.tileType == Door).foreach(wall => {
+    game.level.tiles.flatten.filter(tile => tile.tileType == Wall || tile.tileType == Door).foreach(wall => {
       if(rectangle.overlaps(wall.sprite.getBoundingRectangle)){
         position.set(Utils.roundTo(position.x + Constants.TileSize / 2, Constants.TileSize) - Constants.TileSize / 2, Utils.roundTo(position.y + Constants.TileSize / 2, Constants.TileSize) - Constants.TileSize / 2)
         directionVector = getDirectionVector(Still)

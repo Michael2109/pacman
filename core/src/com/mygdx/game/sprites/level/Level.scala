@@ -59,43 +59,52 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
     List(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   ).reverse
 
-  val tiles: List[Tile] = {
-    val result = ListBuffer[Tile]()
+  val tiles: List[List[Tile]] = {
+    val result = ListBuffer[ListBuffer[Tile]]()
     tileNumbers.zipWithIndex.foreach {
-      case (tileRow, rowIndex) => tileRow.zipWithIndex.foreach {
-        case (tile, columnIndex) =>
-          val tileType = tile match {
-            case 0 => Wall
-            case 1 => Dot
-            case 2 => Empty
-            case 3 => Door
-          }
-          result += new Tile(game, new Vector2(columnIndex * tileWidth + tileWidth / 2, rowIndex * tileHeight - tileWidth / 2), tileType)
+      case (tileRow, rowIndex) => {
+        val row = ListBuffer[Tile]()
+        tileRow.zipWithIndex.foreach {
+          case (tile, columnIndex) =>
+            val tileType = tile match {
+              case 0 => Wall
+              case 1 => Dot
+              case 2 => Empty
+              case 3 => Door
+            }
+            row += new Tile(game, columnIndex, rowIndex, tileType)
+        }
+        result += row
       }
     }
-    result.toList
+    result.map(_.toList).toList
   }
 
   lazy val dots: List[Dot] = {
     val dots = ListBuffer[Dot]()
-    tiles.foreach(tile => {
-      tile.tileType match {
-        case Dot => dots += new Dot(game, new Vector2(tile.position.x, tile.position.y))
-        case _ =>
-      }
+    tiles.foreach(row => {
+      row.foreach(tile => {
+        tile.tileType match {
+          case Dot => dots += new Dot(game, new Vector2(tile.position.x, tile.position.y))
+          case _ =>
+        }
+      })
+
     })
     dots.toList
   }
 
+  def getTile(pos: Vector2): Tile = tiles.flatten.sortBy(_.position.dst(pos)).head
+
   override def update(delta: Float): Unit = {
     sprite.setPosition(position.x, position.y)
-    tiles.foreach(_.update(delta))
+    tiles.foreach(row => row.foreach(_.update(delta)))
   }
 
   override def render(): Unit = {
     super.render()
     if(Constants.DisplayWalls) {
-      tiles.foreach(_.render())
+      tiles.foreach(row => row.foreach(_.render()))
     }
   }
 

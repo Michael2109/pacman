@@ -8,7 +8,10 @@ import com.mygdx.game.textures.TextureLoader
 
 class Blinky(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) {
 
-
+  override def setTarget(): Unit = {
+    target = new Vector2(game.pacman.position)
+  }
 
   override lazy val textureRegion: TextureRegion = TextureLoader.Blinky
+
 }
