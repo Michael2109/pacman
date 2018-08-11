@@ -7,7 +7,9 @@ import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.GameSprite
 import com.mygdx.game.textures.TextureLoader
 
-class Wall(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
+class Tile(game: Game, positionInit: Vector2, tileTypeInit: TileType) extends GameSprite(game, positionInit) {
+
+  val tileType = tileTypeInit
 
   val width = Constants.TileSize
   val height = Constants.TileSize
@@ -25,5 +27,12 @@ class Wall(game: Game, positionInit: Vector2) extends GameSprite(game, positionI
     )
   )
 
-  override lazy val textureRegion: TextureRegion = TextureLoader.Wall
+  override lazy val textureRegion: TextureRegion = {
+    tileType match {
+      case Door => TextureLoader.Door
+      case Wall => TextureLoader.Wall
+      case Dot => TextureLoader.Empty
+      case Empty => TextureLoader.Empty
+    }
+  }
 }

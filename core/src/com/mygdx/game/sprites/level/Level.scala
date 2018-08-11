@@ -19,10 +19,10 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
   val tileHeight = Constants.TileSize
 
   /**
-    * 0 == Wall
+    * 0 == Tile
     * 1 == Empty
     */
-  val tiles = List(
+  val tileNumbers = List(
     List(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
     List(0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0),
     List(0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0),
@@ -31,14 +31,14 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
     List(0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0),
     List(0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0),
     List(0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0),
-    List(0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0),
+    List(0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0),
 
     List(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
     List(0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0),
     List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
-    List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
-    List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
-    List(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+    List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 3, 3, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+    List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2, 2, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
+    List(2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 0, 0, 2, 2, 2, 2, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2),
     List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
     List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
     List(0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0),
@@ -48,7 +48,7 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
     List(0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0),
     List(0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0),
     List(0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0),
-    List(0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0),
+    List(0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0),
     List(0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0),
     List(0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0),
     List(0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0),
@@ -59,43 +59,44 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
     List(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   ).reverse
 
-  lazy val dots: List[Dot] ={
-
-    val dots = ListBuffer[Dot]()
-    tiles.zipWithIndex.foreach {
+  val tiles: List[Tile] = {
+    val result = ListBuffer[Tile]()
+    tileNumbers.zipWithIndex.foreach {
       case (tileRow, rowIndex) => tileRow.zipWithIndex.foreach {
         case (tile, columnIndex) =>
-          if (tile == 1) {
-            dots += new Dot(game, new Vector2(columnIndex * tileWidth + tileWidth / 2, rowIndex * tileHeight - tileHeight / 2))
+          val tileType = tile match {
+            case 0 => Wall
+            case 1 => Dot
+            case 2 => Empty
+            case 3 => Door
           }
-      }
-    }
-    dots.toList
-  }
-
-  val walls: List[Wall] = {
-    val result = ListBuffer[Wall]()
-    tiles.zipWithIndex.foreach {
-      case (tileRow, rowIndex) => tileRow.zipWithIndex.foreach {
-        case (tile, columnIndex) =>
-          if (tile == 0) {
-            result += new Wall(game, new Vector2(columnIndex * tileWidth + tileWidth / 2, rowIndex * tileHeight - tileWidth / 2))
-          }
+          result += new Tile(game, new Vector2(columnIndex * tileWidth + tileWidth / 2, rowIndex * tileHeight - tileWidth / 2), tileType)
       }
     }
     result.toList
   }
 
-  def getGraph(): Graph = new Graph(List())
+  lazy val dots: List[Dot] = {
+    val dots = ListBuffer[Dot]()
+    tiles.foreach(tile => {
+      tile.tileType match {
+        case Dot => dots += new Dot(game, new Vector2(tile.position.x, tile.position.y))
+        case _ =>
+      }
+    })
+    dots.toList
+  }
 
   override def update(delta: Float): Unit = {
     sprite.setPosition(position.x, position.y)
-    walls.foreach(_.update(delta))
+    tiles.foreach(_.update(delta))
   }
 
   override def render(): Unit = {
     super.render()
-    walls.foreach(_.render())
+    if(Constants.DisplayWalls) {
+      tiles.foreach(_.render())
+    }
   }
 
   override lazy val polygon = new Polygon(

@@ -4,11 +4,32 @@ size: 227,265
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+door
+  rotate: false
+  xy: 17, 7
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 dot
   rotate: false
   xy: 226, 264
   size: 1, 1
   orig: 1, 1
+  offset: 0, 0
+  index: -1
+empty
+  rotate: false
+  xy: 27, 7
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+intersection
+  rotate: false
+  xy: 37, 7
+  size: 8, 8
+  orig: 8, 8
   offset: 0, 0
   index: -1
 level
@@ -27,8 +48,42 @@ pacman
   index: -1
 wall
   rotate: false
-  xy: 17, 7
+  xy: 47, 7
   size: 8, 8
   orig: 8, 8
+  offset: 0, 0
+  index: -1
+
+packed_textures2.png
+size: 30,30
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ghosts/blinky
+  rotate: false
+  xy: 0, 16
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ghosts/clyde
+  rotate: false
+  xy: 0, 0
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ghosts/inky
+  rotate: false
+  xy: 16, 16
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+ghosts/pinky
+  rotate: false
+  xy: 16, 0
+  size: 14, 14
+  orig: 14, 14
   offset: 0, 0
   index: -1

@@ -40,7 +40,15 @@ object TextureLoader {
   val Dot: TextureRegion = atlas.findRegion("dot")
 
   val Wall: TextureRegion = atlas.findRegion("wall")
+  val Door: TextureRegion = atlas.findRegion("door")
+  val Intersection: TextureRegion = atlas.findRegion("intersection")
+  val Empty: TextureRegion = atlas.findRegion("empty")
 
   val Pacman: TextureRegion = atlas.findRegion("pacman")
+
+  val Blinky: TextureRegion = atlas.findRegion("ghosts/blinky")
+  val Pinky: TextureRegion = atlas.findRegion("ghosts/pinky")
+  val Inky: TextureRegion = atlas.findRegion("ghosts/inky")
+  val Clyde: TextureRegion = atlas.findRegion("ghosts/clyde")
 
 }

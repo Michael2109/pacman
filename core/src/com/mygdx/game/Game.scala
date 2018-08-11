@@ -8,8 +8,9 @@ import com.badlogic.gdx.{ApplicationAdapter, Gdx}
 import com.mygdx.game.constants.Constants
 import com.mygdx.game.user.User
 import com.mygdx.game.graph.Graph
+import com.mygdx.game.sprites.ghosts.{Blinky, Clyde, Inky, Pinky}
 import com.mygdx.game.sprites.level.Level
-import com.mygdx.game.sprites.pacman.Pacman
+import com.mygdx.game.sprites.pacman.{Ghost, Pacman}
 
 class Game extends ApplicationAdapter {
 
@@ -22,9 +23,14 @@ class Game extends ApplicationAdapter {
 
   lazy val level: Level = new Level(this)
 
-  lazy val pacman: Pacman = new Pacman(this, new Vector2(Constants.TileSize + Constants.TileSize / 2, Constants.TileSize * 2))
+  lazy val pacman: Pacman = new Pacman(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
 
-  lazy val graph: Graph = level.getGraph()
+  lazy val ghosts: List[Ghost] = List(
+    new Blinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2)),
+    new Pinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2)),
+    new Inky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2)),
+    new Clyde(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
+  )
 
   override def create(): Unit = {
 
@@ -48,6 +54,8 @@ class Game extends ApplicationAdapter {
 
     pacman.update(delta)
 
+    ghosts.foreach(_.update(delta))
+
     level.dots.foreach(_.update(delta))
   }
 
@@ -68,9 +76,9 @@ class Game extends ApplicationAdapter {
 
     pacman.render()
 
-    level.dots.foreach(_.render())
+    ghosts.foreach(_.render())
 
-    graph.draw(shapeRenderer, batch)
+    level.dots.foreach(_.render())
   }
 
   override def dispose(): Unit = {

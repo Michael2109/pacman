@@ -6,12 +6,13 @@ import com.badlogic.gdx.math.{Polygon, Rectangle, Vector2}
 import com.mygdx.game.{Game, Score}
 import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.GameSprite
+import com.mygdx.game.sprites.level.{Door, Wall}
 import com.mygdx.game.textures.TextureLoader
 import com.mygdx.game.utils.Utils
 
 class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
 
-  private var directionVector: Vector2 = new Vector2(0, 0)
+  private var directionVector: Vector2 = new Vector2(-1, 0)
 
   val rectangle: Rectangle = new Rectangle(0, 0, Constants.TileSize, Constants.TileSize)
 
@@ -20,11 +21,11 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
 
   def getDirectionVector(newDirection: Direction): Vector2 ={
     newDirection match {
-      case Up() => new Vector2(0, 1)
-      case Down() => new Vector2(0, -1)
-      case Left() => new Vector2(-1, 0)
-      case Right() => new Vector2(1, 0)
-      case Still() => new Vector2(0, 0)
+      case Up => new Vector2(0, 1)
+      case Down => new Vector2(0, -1)
+      case Left => new Vector2(-1, 0)
+      case Right => new Vector2(1, 0)
+      case Still => new Vector2(0, 0)
     }
   }
 
@@ -34,7 +35,7 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
     position.add(movement)
     rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
     sprite.setPosition(rectangle.x, rectangle.y)
-    game.level.walls.foreach(wall => {
+    game.level.tiles.filter(tile => tile.tileType == Wall || tile.tileType == Door).foreach(wall => {
       if(rectangle.overlaps(wall.sprite.getBoundingRectangle)){
         collides = true
       }
@@ -47,25 +48,25 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
   override def update(delta: Float): Unit = {
 
     if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-      val nextDirectionVector = game.pacman.getDirectionVector(Up())
+      val nextDirectionVector = game.pacman.getDirectionVector(Up)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
       }
     }
     if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-      val nextDirectionVector = game.pacman.getDirectionVector(Down())
+      val nextDirectionVector = game.pacman.getDirectionVector(Down)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
       }
     }
     if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-      val nextDirectionVector = game.pacman.getDirectionVector(Left())
+      val nextDirectionVector = game.pacman.getDirectionVector(Left)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
       }
     }
     if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-      val nextDirectionVector = game.pacman.getDirectionVector(Right())
+      val nextDirectionVector = game.pacman.getDirectionVector(Right)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
       }
@@ -80,10 +81,10 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
   }
 
   def collisionDetection(): Unit ={
-    game.level.walls.foreach(wall => {
+    game.level.tiles.filter(tile => tile.tileType == Wall || tile.tileType == Door).foreach(wall => {
       if(rectangle.overlaps(wall.sprite.getBoundingRectangle)){
         position.set(Utils.roundTo(position.x + Constants.TileSize / 2, Constants.TileSize) - Constants.TileSize / 2, Utils.roundTo(position.y + Constants.TileSize / 2, Constants.TileSize) - Constants.TileSize / 2)
-        directionVector = getDirectionVector(Still())
+        directionVector = getDirectionVector(Still)
         rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
       }
     })
