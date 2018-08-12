@@ -8,7 +8,7 @@ import com.mygdx.game.textures.TextureLoader
 
 class Clyde(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) {
 
-  override def setTarget(): Unit = ()
+  override def getTarget(): Vector2 = new Vector2()
 
   override lazy val textureRegion: TextureRegion = TextureLoader.Clyde
 

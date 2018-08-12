@@ -12,6 +12,7 @@ import com.mygdx.game.utils.Utils
 
 class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
 
+  var currentDirection: Direction = Left
   private var directionVector: Vector2 = new Vector2(-1, 0)
 
   val rectangle: Rectangle = new Rectangle(0, 0, Constants.TileSize, Constants.TileSize)
@@ -51,24 +52,28 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
       val nextDirectionVector = game.pacman.getDirectionVector(Up)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
+        currentDirection = Up
       }
     }
     if (Gdx.input.isKeyPressed(Input.Keys.S)) {
       val nextDirectionVector = game.pacman.getDirectionVector(Down)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
+        currentDirection = Down
       }
     }
     if (Gdx.input.isKeyPressed(Input.Keys.A)) {
       val nextDirectionVector = game.pacman.getDirectionVector(Left)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
+        currentDirection = Left
       }
     }
     if (Gdx.input.isKeyPressed(Input.Keys.D)) {
       val nextDirectionVector = game.pacman.getDirectionVector(Right)
       if (checkNoFutureCollision(nextDirectionVector)) {
         directionVector = nextDirectionVector
+        currentDirection = Right
       }
     }
 
@@ -86,6 +91,7 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
         position.set(Utils.roundTo(position.x + Constants.TileSize / 2, Constants.TileSize) - Constants.TileSize / 2, Utils.roundTo(position.y + Constants.TileSize / 2, Constants.TileSize) - Constants.TileSize / 2)
         directionVector = getDirectionVector(Still)
         rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
+        currentDirection = Still
       }
     })
 

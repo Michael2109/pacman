@@ -8,8 +8,14 @@ import com.mygdx.game.textures.TextureLoader
 
 class Blinky(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) {
 
-  override def setTarget(): Unit = {
-    target = new Vector2(game.pacman.position)
+  val scatterTarget = game.level.tiles(27)(24).position
+
+  override def getTarget(): Vector2 = {
+    mode match {
+      case Scatter => scatterTarget
+      case Chase => new Vector2(game.pacman.position)
+      case Frightened => new Vector2(game.pacman.position)
+    }
   }
 
   override lazy val textureRegion: TextureRegion = TextureLoader.Blinky

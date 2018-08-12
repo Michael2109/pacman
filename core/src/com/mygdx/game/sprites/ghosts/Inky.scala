@@ -8,7 +8,7 @@ import com.mygdx.game.textures.TextureLoader
 
 class Inky(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) {
 
-  override def setTarget(): Unit = ()
+  override def getTarget(): Vector2 = new Vector2(0, 0)
 
   override lazy val textureRegion: TextureRegion = TextureLoader.Inky
 }

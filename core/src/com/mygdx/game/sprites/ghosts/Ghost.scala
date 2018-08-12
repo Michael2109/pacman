@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.{Polygon, Rectangle, Vector2}
 import com.mygdx.game.{Game, Score}
 import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.GameSprite
-import com.mygdx.game.sprites.ghosts.Scatter
+import com.mygdx.game.sprites.ghosts.{Chase, GhostMode, Scatter}
 import com.mygdx.game.sprites.level.{Door, Wall}
 import com.mygdx.game.textures.TextureLoader
 import com.mygdx.game.utils.Utils
@@ -16,9 +16,7 @@ import scala.util.Random
 
 abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
 
-  protected var target: Vector2 = new Vector2(0,0)
-
-  var mode = Scatter
+  var mode: GhostMode = Chase
 
   private var directionVector: Vector2 = new Vector2(-1, 0)
 
@@ -29,7 +27,7 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
   val width = 14
   val height = 14
 
-  def setTarget(): Unit
+  def getTarget(): Vector2
 
   def getDirectionVector(newDirection: Direction): Vector2 = {
     newDirection match {
@@ -59,18 +57,16 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
 
   override def update(delta: Float): Unit = {
 
-    setTarget()
+    val target = getTarget()
 
-    val targetTile = game.level.getTile(target)
-    val tileX = targetTile.tileX
-    val tileY = targetTile.tileY
+    val targetTile = game.level.getTile(target).position
 
     // If travelling left check to see if can move up, down or left
     val canMove = Map(
-      Up -> (checkNoFutureCollision(getDirectionVector(Up)), position.dst(game.level.tiles(tileY - 1)(tileX).position)),
-      Down -> (checkNoFutureCollision(getDirectionVector(Down)), position.dst(game.level.tiles(tileY + 1)(tileX).position)),
-      Left -> (checkNoFutureCollision(getDirectionVector(Left)), position.dst(game.level.tiles(tileY)(tileX + 1).position)),
-      Right -> (checkNoFutureCollision(getDirectionVector(Right)), position.dst(game.level.tiles(tileY)(tileX - 1).position))
+      Up -> (checkNoFutureCollision(getDirectionVector(Up)), position.dst(new Vector2(targetTile).add(0, -Constants.TileSize))),
+      Down -> (checkNoFutureCollision(getDirectionVector(Down)), position.dst(new Vector2(targetTile).add(0, Constants.TileSize))),
+      Left -> (checkNoFutureCollision(getDirectionVector(Left)), position.dst(new Vector2(targetTile).add(Constants.TileSize, 0))),
+      Right -> (checkNoFutureCollision(getDirectionVector(Right)), position.dst(new Vector2(targetTile).add(-Constants.TileSize, 0)))
     ).filter(move => move._2._1).filterKeys(_ != getOppositeDirection(currentDirection))
 
     // Get the closest if moves to the next tile
