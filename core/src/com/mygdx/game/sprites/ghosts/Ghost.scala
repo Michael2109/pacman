@@ -1,7 +1,9 @@
 package com.mygdx.game.sprites.pacman
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.{Polygon, Rectangle, Vector2}
 import com.mygdx.game.{Game, Score}
 import com.mygdx.game.constants.Constants
@@ -82,6 +84,17 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
     sprite.setPosition(rectangle.x + rectangle.width / 2 - width / 2, rectangle.y + rectangle.height / 2 - height / 2)
 
     collisionDetection()
+  }
+
+  override def render(): Unit = {
+    super.render()
+
+    val target = getTarget()
+    game.shapeRenderer.begin(ShapeType.Line)
+    game.shapeRenderer.setColor(Color.BLUE)
+    game.shapeRenderer.line(target.x - 3, target.y, target.x + 3, target.y)
+    game.shapeRenderer.line(target.x, target.y - 3, target.x, target.y + 3)
+    game.shapeRenderer.end()
   }
 
   def getOppositeDirection(dir: Direction): Direction ={
