@@ -8,5 +8,5 @@ object Constants {
 
   val TileSize = 8
 
-  val DisplayWalls = false
+  val DisplayWalls = true
 }
