@@ -8,7 +8,7 @@ import com.mygdx.game.textures.TextureLoader
 
 class Blinky(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) {
 
-  val scatterTarget = game.level.tiles(27)(24).position
+  val scatterTarget = game.level.tiles(25)(24).position
 
   override def getTarget(): Vector2 = {
     mode match {

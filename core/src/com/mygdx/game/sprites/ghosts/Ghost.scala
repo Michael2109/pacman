@@ -22,7 +22,7 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
 
   private var directionVector: Vector2 = new Vector2(-1, 0)
 
-  private var currentDirection: Direction = Left
+  var currentDirection: Direction = Left
 
   val rectangle: Rectangle = new Rectangle(0, 0, Constants.TileSize, Constants.TileSize)
 
@@ -72,8 +72,9 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
     ).filter(move => move._2._1).filterKeys(_ != getOppositeDirection(currentDirection))
 
     // Get the closest if moves to the next tile
-    val sortedMoves = ListMap(canMove.toSeq.sortBy(_._2._2):_*)
+    val sortedMoves = ListMap(canMove.toSeq.sortBy(_._2._2): _*)
 
+    println(getClass)
     val nextDirection = sortedMoves.head._1
     directionVector = getDirectionVector(nextDirection)
     currentDirection = nextDirection
@@ -97,7 +98,7 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
     game.shapeRenderer.end()
   }
 
-  def getOppositeDirection(dir: Direction): Direction ={
+  def getOppositeDirection(dir: Direction): Direction = {
     dir match {
       case Up => Down
       case Down => Up
@@ -108,6 +109,13 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
 
   def collisionDetection(): Unit = {
 
+    if (position.x <= -Constants.TileSize * 2 && currentDirection == Left) {
+      position.x = Constants.TileSize * 29
+    }
+
+    if (position.x > Constants.TileSize * 29 && currentDirection == Right) {
+      position.x = -Constants.TileSize * 1
+    }
   }
 
   override lazy val polygon = new Polygon(

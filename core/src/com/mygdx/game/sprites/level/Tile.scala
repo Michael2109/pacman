@@ -7,7 +7,7 @@ import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.GameSprite
 import com.mygdx.game.textures.TextureLoader
 
-class Tile(game: Game, tileXInit: Int, tileYInit: Int, tileTypeInit: TileType) extends GameSprite(game, new Vector2(tileXInit * Constants.TileSize + Constants.TileSize / 2,  tileYInit * Constants.TileSize - Constants.TileSize / 2 )) {
+class Tile(game: Game, tileXInit: Int, tileYInit: Int, tileTypeInit: TileType) extends GameSprite(game, new Vector2(tileXInit * Constants.TileSize - Constants.TileSize / 2 - Constants.TileSize,  tileYInit * Constants.TileSize - Constants.TileSize / 2 )) {
 
   val tileX = tileXInit
   val tileY = tileYInit

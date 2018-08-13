@@ -23,7 +23,7 @@ class Inky(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) 
           case Right => new Vector2(pacmansTile.position).add(Constants.TileSize * 2, 0)
           case Still => new Vector2(pacmansTile.position)
         }
-        val blinkyPos = game.level.getTile(game.blinky.position).position
+        val blinkyPos = new Vector2(game.level.getTile(game.blinky.position).position)
 
         val blinkyToPacman = futurePacmanPos.sub(blinkyPos)
 

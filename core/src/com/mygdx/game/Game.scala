@@ -32,20 +32,20 @@ class Game extends ApplicationAdapter {
 
   lazy val clyde: Ghost = new Clyde(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
 
-  lazy val ghosts: List[Ghost] = List(blinky, pinky/*, inky, clyde*/)
+  lazy val ghosts: List[Ghost] = List(blinky, pinky, inky, clyde)
 
   var currentLevel = 1
 
   override def create(): Unit = {
 
-    Gdx.input.setInputProcessor(new User(this));
+    Gdx.input.setInputProcessor(new User(this))
 
     camera.setToOrtho(false)
     Gdx.graphics.setVSync(true)
 
     batch.enableBlending()
 
-    val scale = level.width.asInstanceOf[Float] / Gdx.graphics.getWidth.asInstanceOf[Float]
+    val scale = level.height.asInstanceOf[Float] / Gdx.graphics.getWidth.asInstanceOf[Float]
     val width = (Gdx.graphics.getWidth * scale).asInstanceOf[Int]
     val height = (Gdx.graphics.getHeight * scale).asInstanceOf[Int]
     camera.setToOrtho(false, width, height)
@@ -105,6 +105,7 @@ class Game extends ApplicationAdapter {
         if(System.currentTimeMillis() - before > scatterTime){
           currentMode = Chase
           ghosts.foreach(_.mode = currentMode)
+          ghosts.foreach(ghost => ghost.currentDirection = ghost.getOppositeDirection(ghost.currentDirection))
           before = System.currentTimeMillis()
         }
       }
@@ -112,6 +113,7 @@ class Game extends ApplicationAdapter {
         if(System.currentTimeMillis() - before > chaseTime){
           currentMode = Scatter
           ghosts.foreach(_.mode = currentMode)
+          ghosts.foreach(ghost => ghost.currentDirection = ghost.getOppositeDirection(ghost.currentDirection))
           before = System.currentTimeMillis()
         }
       }

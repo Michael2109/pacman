@@ -102,6 +102,15 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
       }
     })
 
+
+    if(position.x < -Constants.TileSize * 2){
+      position.x = Constants.TileSize * 29
+    }
+
+    if(position.x > Constants.TileSize * 29){
+      position.x = -Constants.TileSize * 1
+    }
+
   }
 
   override lazy val polygon = new Polygon(
