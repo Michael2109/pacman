@@ -34,8 +34,7 @@ class Tile(game: Game, tileXInit: Int, tileYInit: Int, tileTypeInit: TileType) e
     tileType match {
       case Door => TextureLoader.Door
       case Wall => TextureLoader.Wall
-      case Dot => TextureLoader.Empty
-      case Empty => TextureLoader.Empty
+      case Dot | Fruit | Empty => TextureLoader.Empty
     }
   }
 }

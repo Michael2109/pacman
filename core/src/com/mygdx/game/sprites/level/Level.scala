@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.{Polygon, Vector2}
 import com.mygdx.game.Game
 import com.mygdx.game.constants.Constants
 import com.mygdx.game.graph.Graph
-import com.mygdx.game.sprites.{Dot, GameSprite}
+import com.mygdx.game.sprites.{Collectable, Dot, Fruit, GameSprite}
 import com.mygdx.game.textures.TextureLoader
 
 import scala.collection.mutable.ListBuffer
@@ -26,7 +26,7 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
     List(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
     List(0,0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0),
     List(0,0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-    List(0,0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0),
+    List(0,0, 0, 4, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 4, 0, 0, 0),
     List(0,0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0),
     List(0,0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0),
     List(0,0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0),
@@ -48,7 +48,7 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
     List(0,0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0),
     List(0,0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0),
     List(0,0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0),
-    List(0,0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0),
+    List(0,0, 0, 4, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 4, 0, 0, 0),
     List(0,0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0),
     List(0,0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0),
     List(0,0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0),
@@ -71,6 +71,7 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
               case 1 => Dot
               case 2 => Empty
               case 3 => Door
+              case 4 => Fruit
             }
             row += new Tile(game, columnIndex, rowIndex, tileType)
         }
@@ -80,18 +81,19 @@ class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
     result.map(_.toList).toList
   }
 
-  lazy val dots: List[Dot] = {
-    val dots = ListBuffer[Dot]()
+  lazy val collectables: List[Collectable] = {
+    val collectables = ListBuffer[Collectable]()
     tiles.foreach(row => {
       row.foreach(tile => {
         tile.tileType match {
-          case Dot => dots += new Dot(game, new Vector2(tile.position.x, tile.position.y))
+          case Dot => collectables += new Dot(game, new Vector2(tile.position.x, tile.position.y))
+          case Fruit => collectables += new Fruit(game, new Vector2(tile.position.x, tile.position.y))
           case _ =>
         }
       })
 
     })
-    dots.toList
+    collectables.toList
   }
 
   def getTile(pos: Vector2): Tile = tiles.flatten.sortBy(_.position.dst(pos)).head

@@ -62,7 +62,8 @@ class Game extends ApplicationAdapter {
 
     ghosts.foreach(_.update(delta))
 
-    level.dots.foreach(_.update(delta))
+    level.collectables.foreach(_.update(delta))
+    level.collectables.foreach(_.collisionDetection())
 
     changeMode()
   }
@@ -86,7 +87,7 @@ class Game extends ApplicationAdapter {
 
     ghosts.foreach(_.render())
 
-    level.dots.foreach(_.render())
+    level.collectables.foreach(_.render())
   }
 
   override def dispose(): Unit = {

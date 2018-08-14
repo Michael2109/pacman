@@ -95,14 +95,6 @@ class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positio
       }
     })
 
-    game.level.dots.foreach(dot => {
-      if(sprite.getBoundingRectangle.overlaps(dot.sprite.getBoundingRectangle)){
-        dot.collected = true
-        Score.TotalScore += 10
-      }
-    })
-
-
     if(position.x < -Constants.TileSize * 2){
       position.x = Constants.TileSize * 29
     }

@@ -2,12 +2,10 @@ package com.mygdx.game.sprites
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.{Polygon, Vector2}
-import com.mygdx.game.Game
+import com.mygdx.game.{Game, Score}
 import com.mygdx.game.textures.TextureLoader
 
-class Fruit(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
-
-  var collected = false
+class Fruit(game: Game, positionInit: Vector2) extends Collectable(game, positionInit) {
 
   val width = 4
   val height = 4
@@ -32,4 +30,11 @@ class Fruit(game: Game, positionInit: Vector2) extends GameSprite(game, position
   )
 
   override lazy val textureRegion: TextureRegion = TextureLoader.Fruit
+
+  override def collisionDetection(): Unit ={
+    if(sprite.getBoundingRectangle.overlaps(game.pacman.sprite.getBoundingRectangle)){
+      collected = true
+      Score.TotalScore += 100
+    }
+  }
 }
