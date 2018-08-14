@@ -29,15 +29,11 @@ object TextureLoader {
   /** Allows for selecting a region from within the packed images */
   val atlas = new TextureAtlas(Gdx.files.internal("packed_images/packed_textures.atlas"))
 
-  /**
-    * Level
-    */
+
   val Level: TextureRegion = atlas.findRegion("level")
 
-  /**
-    * Dot
-    */
   val Dot: TextureRegion = atlas.findRegion("dot")
+  val Fruit: TextureRegion = atlas.findRegion("fruit")
 
   val Wall: TextureRegion = atlas.findRegion("wall")
   val Door: TextureRegion = atlas.findRegion("door")

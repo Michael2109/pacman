@@ -24,13 +24,13 @@ class Game extends ApplicationAdapter {
 
   lazy val pacman: Pacman = new Pacman(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
 
-  lazy val blinky: Ghost = new Blinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
+  lazy val blinky: Ghost = new Blinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
 
-  lazy val pinky: Ghost = new Pinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
+  lazy val pinky: Ghost = new Pinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
 
-  lazy val inky: Ghost = new Inky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
+  lazy val inky: Ghost = new Inky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
 
-  lazy val clyde: Ghost = new Clyde(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
+  lazy val clyde: Ghost = new Clyde(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
 
   lazy val ghosts: List[Ghost] = List(blinky, pinky, inky, clyde)
 
@@ -119,6 +119,5 @@ class Game extends ApplicationAdapter {
       }
       case Frightened =>
     }
-
   }
 }

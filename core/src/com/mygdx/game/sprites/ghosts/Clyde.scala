@@ -9,27 +9,31 @@ import com.mygdx.game.textures.TextureLoader
 
 class Clyde(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) {
 
-  val scatterTarget = game.level.tiles(4)(20).position
+  val scatterTarget = game.level.tiles(4)(4).position
 
   override def getTarget(): Vector2 = {
-    mode match {
-      case Scatter => scatterTarget
-      case Chase => {
-        val pacmansTile = game.level.getTile(new Vector2(game.pacman.position))
+    if(inHouse){
+      new Vector2(Constants.TileSize * 24, Constants.TileSize * 40)
+    }else {
+      mode match {
+        case Scatter => scatterTarget
+        case Chase => {
+          val pacmansTile = game.level.getTile(new Vector2(game.pacman.position))
 
-        // Get the distance to pacmans tile
-        val distance = pacmansTile.position.dst(game.level.getTile(position).position)
+          // Get the distance to pacmans tile
+          val distance = pacmansTile.position.dst(game.level.getTile(position).position)
 
-        if (distance / Constants.TileSize < 8) {
-          // If it is less than 8 target the scatter target
-          scatterTarget
+          if (distance / Constants.TileSize < 8) {
+            // If it is less than 8 target the scatter target
+            scatterTarget
+          }
+          else {
+            // if it is more than 8 target pacman
+            new Vector2(pacmansTile.position)
+          }
         }
-        else {
-          // if it is more than 8 target pacman
-          new Vector2(pacmansTile.position)
-        }
+        case Frightened => new Vector2(game.pacman.position)
       }
-      case Frightened => new Vector2(game.pacman.position)
     }
   }
 

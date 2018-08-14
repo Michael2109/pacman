@@ -1,24 +1,21 @@
 package com.mygdx.game.sprites.pacman
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.{Gdx, Input}
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.math.{Polygon, Rectangle, Vector2}
-import com.mygdx.game.{Game, Score}
+import com.mygdx.game.Game
 import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.GameSprite
 import com.mygdx.game.sprites.ghosts.{Chase, GhostMode, Scatter}
 import com.mygdx.game.sprites.level.{Door, Wall}
-import com.mygdx.game.textures.TextureLoader
-import com.mygdx.game.utils.Utils
 
 import scala.collection.immutable.ListMap
-import scala.util.Random
 
 abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
 
-  var mode: GhostMode = Chase
+  var mode: GhostMode = Scatter
+
+  var inHouse: Boolean = true
 
   private var directionVector: Vector2 = new Vector2(-1, 0)
 
@@ -47,7 +44,7 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
     position.add(movement)
     rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
     sprite.setPosition(rectangle.x, rectangle.y)
-    game.level.tiles.flatten.filter(tile => tile.tileType == Wall).foreach(wall => {
+    game.level.tiles.flatten.filter(tile => tile.tileType == Wall || (tile.tileType == Door && !inHouse)).foreach(wall => {
       if (rectangle.overlaps(wall.sprite.getBoundingRectangle)) {
         collides = true
       }
@@ -69,21 +66,35 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
       Down -> (checkNoFutureCollision(getDirectionVector(Down)), position.dst(new Vector2(targetTile).add(0, Constants.TileSize))),
       Left -> (checkNoFutureCollision(getDirectionVector(Left)), position.dst(new Vector2(targetTile).add(Constants.TileSize, 0))),
       Right -> (checkNoFutureCollision(getDirectionVector(Right)), position.dst(new Vector2(targetTile).add(-Constants.TileSize, 0)))
-    ).filter(move => move._2._1).filterKeys(_ != getOppositeDirection(currentDirection))
+    ).filter(move => move._2._1)
 
-    // Get the closest if moves to the next tile
-    val sortedMoves = ListMap(canMove.toSeq.sortBy(_._2._2): _*)
+    if(canMove.isEmpty){
 
-    println(getClass)
-    val nextDirection = sortedMoves.head._1
-    directionVector = getDirectionVector(nextDirection)
-    currentDirection = nextDirection
+    } else if(canMove.size == 1 && inHouse){
+      val nextDirection = canMove.head._1
+      directionVector = getDirectionVector(nextDirection)
+      currentDirection = nextDirection
 
-    position.add(directionVector)
+      position.add(directionVector)
 
-    rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
-    sprite.setPosition(rectangle.x + rectangle.width / 2 - width / 2, rectangle.y + rectangle.height / 2 - height / 2)
+      rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
+      sprite.setPosition(rectangle.x + rectangle.width / 2 - width / 2, rectangle.y + rectangle.height / 2 - height / 2)
+    }else {
 
+      val canMoveWithoutCurrentDir = canMove.filterKeys(_ != getOppositeDirection(currentDirection))
+
+      // Get the closest if moves to the next tile
+      val sortedMoves = ListMap(canMoveWithoutCurrentDir.toSeq.sortBy(_._2._2): _*)
+
+      val nextDirection = sortedMoves.head._1
+      directionVector = getDirectionVector(nextDirection)
+      currentDirection = nextDirection
+
+      position.add(directionVector)
+
+      rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
+      sprite.setPosition(rectangle.x + rectangle.width / 2 - width / 2, rectangle.y + rectangle.height / 2 - height / 2)
+    }
     collisionDetection()
   }
 
@@ -108,6 +119,10 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
   }
 
   def collisionDetection(): Unit = {
+
+    if(position.y >= Constants.TileSize * 19 + Constants.TileSize / 2){
+      inHouse = false
+    }
 
     if (position.x <= -Constants.TileSize * 2 && currentDirection == Left) {
       position.x = Constants.TileSize * 29
