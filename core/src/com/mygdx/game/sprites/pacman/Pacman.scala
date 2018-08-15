@@ -3,7 +3,7 @@ package com.mygdx.game.sprites.pacman
 import com.badlogic.gdx.{Gdx, Input}
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.{Polygon, Rectangle, Vector2}
-import com.mygdx.game.{Game, Score}
+import com.mygdx.game.Game
 import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.GameSprite
 import com.mygdx.game.sprites.level.{Door, Wall}
@@ -13,6 +13,9 @@ import com.mygdx.game.utils.Utils
 class Pacman(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
 
   var currentDirection: Direction = Left
+
+  var lives = 3
+
   private var directionVector: Vector2 = new Vector2(-1, 0)
 
   val rectangle: Rectangle = new Rectangle(0, 0, Constants.TileSize, Constants.TileSize)

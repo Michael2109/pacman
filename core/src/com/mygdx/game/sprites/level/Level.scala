@@ -12,6 +12,8 @@ import scala.collection.mutable.ListBuffer
 
 class Level(game: Game) extends GameSprite(game, new Vector2(0, 0)) {
 
+  val ghostHousePos = new Vector2(Constants.TileSize * 13, Constants.TileSize * 16 + Constants.TileSize / 2)
+
   val width = 224
   val height = 248
 

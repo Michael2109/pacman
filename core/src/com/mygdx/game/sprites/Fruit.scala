@@ -32,7 +32,7 @@ class Fruit(game: Game, positionInit: Vector2) extends Collectable(game, positio
   override lazy val textureRegion: TextureRegion = TextureLoader.Fruit
 
   override def collisionDetection(): Unit ={
-    if(sprite.getBoundingRectangle.overlaps(game.pacman.sprite.getBoundingRectangle)){
+    if(sprite.getBoundingRectangle.overlaps(game.pacman.sprite.getBoundingRectangle) && !collected){
       collected = true
       Score.TotalScore += 100
     }

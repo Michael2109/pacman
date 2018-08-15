@@ -1,8 +1,8 @@
 package com.mygdx.game
 
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch
+import com.badlogic.gdx.graphics.g2d.{BitmapFont, PolygonSpriteBatch}
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.graphics.{GL20, OrthographicCamera}
+import com.badlogic.gdx.graphics.{Color, GL20, OrthographicCamera}
 import com.badlogic.gdx.math.{Vector2, Vector3}
 import com.badlogic.gdx.{ApplicationAdapter, Gdx}
 import com.mygdx.game.constants.Constants
@@ -24,15 +24,17 @@ class Game extends ApplicationAdapter {
 
   lazy val pacman: Pacman = new Pacman(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 7 + Constants.TileSize / 2))
 
-  lazy val blinky: Ghost = new Blinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
+  lazy val blinky: Ghost = new Blinky(this)
 
-  lazy val pinky: Ghost = new Pinky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
+  lazy val pinky: Ghost = new Pinky(this)
 
-  lazy val inky: Ghost = new Inky(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
+  lazy val inky: Ghost = new Inky(this)
 
-  lazy val clyde: Ghost = new Clyde(this, new Vector2(Constants.TileSize * 14, Constants.TileSize * 16 + Constants.TileSize / 2))
+  lazy val clyde: Ghost = new Clyde(this)
 
   lazy val ghosts: List[Ghost] = List(blinky, pinky, inky, clyde)
+
+  lazy val font: BitmapFont = new BitmapFont()
 
   var currentLevel = 1
 
@@ -45,10 +47,8 @@ class Game extends ApplicationAdapter {
 
     batch.enableBlending()
 
-    val scale = level.height.asInstanceOf[Float] / Gdx.graphics.getWidth.asInstanceOf[Float]
-    val width = (Gdx.graphics.getWidth * scale).asInstanceOf[Int]
-    val height = (Gdx.graphics.getHeight * scale).asInstanceOf[Int]
-    camera.setToOrtho(false, width, height)
+    camera.zoom = 1 / Constants.FrameScale
+    camera.setToOrtho(false, Gdx.graphics.getWidth, Gdx.graphics.getHeight)
     camera.position.set(new Vector3(level.width / 2, level.height / 2, 0))
   }
 
@@ -82,6 +82,19 @@ class Game extends ApplicationAdapter {
     Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
 
     level.render()
+
+    // Score
+    batch.begin()
+    batch.enableBlending()
+    font.setColor(Color.WHITE)
+    font.draw(batch, Score.TotalScore.toString, 0, 262)
+
+    // Lives
+    font.draw(batch, pacman.lives.toString, 0, -2)
+
+    // Cherry?
+
+    batch.end()
 
     pacman.render()
 

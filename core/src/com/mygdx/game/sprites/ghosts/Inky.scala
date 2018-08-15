@@ -7,9 +7,16 @@ import com.mygdx.game.constants.Constants
 import com.mygdx.game.sprites.pacman.{Down, Ghost, Left, Right, Still, Up}
 import com.mygdx.game.textures.TextureLoader
 
-class Inky(game: Game, positionInit: Vector2) extends Ghost(game, positionInit) {
+class Inky(game: Game) extends Ghost(game, new Vector2(game.level.ghostHousePos).sub(- (Constants.TileSize * 2), 0)) {
 
   val scatterTarget = game.level.tiles(4)(20).position
+
+  override def update(delta: Float): Unit = {
+    super.update(delta)
+    if(game.level.collectables.filter(_.collected).size >= 30){
+      allowedOutHouse = true
+    }
+  }
 
   override def getTarget(): Vector2 = {
     if(inHouse){

@@ -33,7 +33,7 @@ class Dot(game: Game, positionInit: Vector2) extends Collectable(game, positionI
   override lazy val textureRegion: TextureRegion = TextureLoader.Dot
 
   override def collisionDetection(): Unit ={
-    if(sprite.getBoundingRectangle.overlaps(game.pacman.sprite.getBoundingRectangle)){
+    if(sprite.getBoundingRectangle.overlaps(game.pacman.sprite.getBoundingRectangle) && !collected){
       collected = true
       Score.TotalScore += 10
     }

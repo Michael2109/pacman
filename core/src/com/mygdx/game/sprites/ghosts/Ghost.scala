@@ -11,15 +11,19 @@ import com.mygdx.game.sprites.level.{Door, Wall}
 
 import scala.collection.immutable.ListMap
 
-abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game, positionInit) {
+abstract class Ghost(game: Game, startPosInit: Vector2) extends GameSprite(game, startPosInit) {
 
   var mode: GhostMode = Scatter
 
   var inHouse: Boolean = true
 
+  var allowedOutHouse = false
+
   private var directionVector: Vector2 = new Vector2(-1, 0)
 
   var currentDirection: Direction = Left
+
+  val startPos: Vector2 = startPosInit
 
   val rectangle: Rectangle = new Rectangle(0, 0, Constants.TileSize, Constants.TileSize)
 
@@ -44,7 +48,7 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
     position.add(movement)
     rectangle.setPosition(position.x - rectangle.width / 2, position.y - rectangle.height / 2)
     sprite.setPosition(rectangle.x, rectangle.y)
-    game.level.tiles.flatten.filter(tile => tile.tileType == Wall || (tile.tileType == Door && !inHouse)).foreach(wall => {
+    game.level.tiles.flatten.filter(tile => tile.tileType == Wall || (tile.tileType == Door && inHouse && !allowedOutHouse)).foreach(wall => {
       if (rectangle.overlaps(wall.sprite.getBoundingRectangle)) {
         collides = true
       }
@@ -107,6 +111,11 @@ abstract class Ghost(game: Game, positionInit: Vector2) extends GameSprite(game,
     game.shapeRenderer.line(target.x - 3, target.y, target.x + 3, target.y)
     game.shapeRenderer.line(target.x, target.y - 3, target.x, target.y + 3)
     game.shapeRenderer.end()
+  }
+
+  def reset(): Unit ={
+    position.set(startPos)
+    allowedOutHouse = false
   }
 
   def getOppositeDirection(dir: Direction): Direction = {

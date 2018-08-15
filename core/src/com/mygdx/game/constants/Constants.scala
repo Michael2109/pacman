@@ -4,9 +4,9 @@ object Constants {
 
   val Title = "Ghost"
 
-  val CameraZoom: Float = 0.2f
+  val FrameScale: Float = 3
 
   val TileSize = 8
 
-  val DisplayWalls = false
+  val DisplayWalls = true
 }

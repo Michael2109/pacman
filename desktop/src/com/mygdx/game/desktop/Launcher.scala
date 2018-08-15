@@ -9,9 +9,8 @@ import com.mygdx.game.constants.Constants
 object Launcher {
   def main(arg: Array[String]): Unit = {
     val config = new LwjglApplicationConfiguration
-    val dimension = Toolkit.getDefaultToolkit.getScreenSize
-    config.width = dimension.height - 100
-    config.height = dimension.height - 100
+    config.width = (224 * Constants.FrameScale).asInstanceOf[Int]
+    config.height = (280 * Constants.FrameScale).asInstanceOf[Int]
     config.title = Constants.Title
     config.fullscreen = false
     new LwjglApplication(new Game, config)
